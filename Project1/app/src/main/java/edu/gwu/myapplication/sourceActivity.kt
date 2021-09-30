@@ -18,8 +18,6 @@ class sourceActivity : AppCompatActivity() {
         val intent: Intent = getIntent()
         val term: String = intent.getStringExtra("TERM")!!
 
-        // Kotlin-shorthand for setTitle(...)
-        // getString(...) reads from strings.xml and allows you to substitute in any formatting arguments
         val title = "Search for ${term}"
         setTitle(title)
 
