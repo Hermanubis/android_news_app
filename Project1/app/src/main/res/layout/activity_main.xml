@@ -90,7 +90,7 @@
                 android:id="@+id/newsLoc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Top Headlines"
+                android:text="News by Location"
                 android:textAlignment="center"
                 android:textColor="#5C6871"
                 android:textSize="20sp"
