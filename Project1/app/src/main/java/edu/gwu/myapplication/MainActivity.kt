@@ -37,10 +37,17 @@ class MainActivity : AppCompatActivity() {
 //        val savedSearch = preferences.getString("SEARCHED-ITEM", "")
 //        search.setText(savedSearch)
 
+        searchbar.setOnSearchClickListener{
+            val intent: Intent = Intent(this, sourceActivity::class.java)
+            intent.putExtra("TERM", searchbar.query.toString())
+            startActivity(intent)
+        }
+
+
         searchbar.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(term: String?): Boolean {
-                val intent: Intent = Intent(applicationContext, sources::class.java)
+                val intent: Intent = Intent(applicationContext, sourceActivity::class.java)
                 intent.putExtra("TERM", searchbar.query.toString())
                 startActivity(intent)
                 return false
@@ -54,8 +61,8 @@ class MainActivity : AppCompatActivity() {
         })
 
         search.setOnClickListener {
-            val intent: Intent = Intent(this, sources::class.java)
-            intent.putExtra("TERM", "Android")
+            val intent: Intent = Intent(this, sourceActivity::class.java)
+            intent.putExtra("TERM", searchbar.query.toString())
             startActivity(intent)
         }
     }
