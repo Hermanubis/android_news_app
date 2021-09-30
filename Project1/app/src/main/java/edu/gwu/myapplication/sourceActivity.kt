@@ -2,17 +2,23 @@ package edu.gwu.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class sourceActivity : AppCompatActivity() {
 
+    private lateinit var spinner: Spinner
     private lateinit var recyclerView: RecyclerView
+
+    var categories = arrayOf<String?>("Breaking", "World", "Politics", "Business", "Sports", "Entertainment")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sources)
+        spinner = findViewById(R.id.spinner)
+        //spinner.onItemSelectedListener = this
 
         // Retrieve data from the Intent that launched this screen
         val intent: Intent = getIntent()
@@ -20,6 +26,12 @@ class sourceActivity : AppCompatActivity() {
 
         val title = "Search for ${term}"
         setTitle(title)
+
+        val spinnerAdapter: ArrayAdapter<*> = ArrayAdapter<Any?>(
+            this, android.R.layout.simple_spinner_item, categories)
+
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
 
         val newsSource: List<sources> = getFakeTweets()
         recyclerView = findViewById(R.id.recyclerView)
