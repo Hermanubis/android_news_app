@@ -1,4 +1,6 @@
 package edu.gwu.myapplication
 
-class sources {
-}
+data class sources(
+    val sourceName: String,
+    val content: String
+)
