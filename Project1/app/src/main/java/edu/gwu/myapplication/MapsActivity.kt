@@ -6,6 +6,7 @@ import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
@@ -43,7 +44,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         cardView = findViewById(R.id.map_card)
-
+        textView = findViewById(R.id.mapTerm)
         recyclerView = findViewById(R.id.newsrecycle)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -98,6 +99,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 if(results != null){
                     var articles: List<news> = newsManager.retrieveMapNews(newsAPI, results)
                     adapter = newsAdapter(articles)
+                    textView.text = "Results from ${results[0].countryName}"
                     // Move back to the UI Thread now that we have some results to show.
                     // The UI can only be updated from the UI Thread.
                     runOnUiThread {
@@ -107,7 +109,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             // The Geocoder's first result is often the "best" one in terms of its accuracy / confidence.
                             val firstResult: Address = results[0]
                             val postalAddress: String = firstResult.getAddressLine(0)
-                            val adminArea = results.first().adminArea
+                            val adminArea = results[0].adminArea
+                            val country = results[0].countryName
 
                             //Log.d("MapsActivity", "First result: $postalAddress")
 
@@ -118,6 +121,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             // Add a map marker where the user tapped and pan the camera over
                             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(coords, 10.0f))
 
+                            cardView.visibility = View.VISIBLE
                             recyclerView.adapter = adapter
                             recyclerView.layoutManager = LinearLayoutManager(this@MapsActivity)
 

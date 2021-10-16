@@ -61,13 +61,13 @@ class newsManager {
         // Unlike normal API Keys (like Google Maps and News API) Twitter uses something slightly different,
         // so the "apiKey" here isn't really an API Key - we'll see in Lecture 7.
 
-        if (location.first().countryCode.isNullOrEmpty()) {
+        if (location[1].countryCode.isNullOrEmpty()) {
             return emptyList()
         }
 
         var request: Request =
             Request.Builder()
-                .url("https://newsapi.org/v2/everything?qInTitle=${location.first()?.countryName}&sortBy=relevancy&apiKey=$newsAPI")
+                .url("https://newsapi.org/v2/everything?qInTitle=${location[0].countryName}&sortBy=relevancy&apiKey=$newsAPI")
                 .header("Authorization", "$newsAPI")
                 .build()
 
