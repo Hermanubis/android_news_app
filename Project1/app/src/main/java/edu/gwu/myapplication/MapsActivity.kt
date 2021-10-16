@@ -98,6 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 if(results != null){
                     var articles: List<news> = newsManager.retrieveMapNews(newsAPI, results)
+                    
                     adapter = newsAdapter(articles)
                     textView.text = "Results from ${results[0].countryName}"
                     // Move back to the UI Thread now that we have some results to show.

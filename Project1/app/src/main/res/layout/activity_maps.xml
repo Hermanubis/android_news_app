@@ -57,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:clickable="true"
                 android:orientation="horizontal"
                 tools:listitem="@layout/row_news" />
 
