@@ -65,6 +65,11 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("TERM", searchbar.query.toString())
             startActivity(intent)
         }
+
+        mapButton.setOnClickListener{
+            val intent: Intent = Intent(applicationContext, MapsActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 //    private val textWatcher: TextWatcher = object : TextWatcher {

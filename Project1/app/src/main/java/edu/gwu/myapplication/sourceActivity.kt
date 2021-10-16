@@ -2,17 +2,21 @@ package edu.gwu.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import org.jetbrains.anko.doAsync
 
 class sourceActivity : AppCompatActivity() {
 
     private lateinit var spinner: Spinner
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: sourceAdapter
+    var category_ind = 0
 
-    var categories = arrayOf<String?>("Breaking", "World", "Politics", "Business", "Sports", "Entertainment")
+    val categories = arrayOf<String>("general", "entertainment", "general", "health", "science", "sports", "technology")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,18 +36,42 @@ class sourceActivity : AppCompatActivity() {
 
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
-
-        val newsSource: List<sources> = getFakeTweets()
+        spinner.setSelection(category_ind)
         recyclerView = findViewById(R.id.recyclerView)
+        val newsManager: newsManager = newsManager()
+        val newsAPI = getString(R.string.newsAPI)
 
-        // Sets scrolling direction to vertical
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                category_ind = position
+                doAsync {
+                    val newsSource: List<sources> = newsManager.retrieveSources(newsAPI, categories[category_ind])
 
-        val adapter: sourceAdapter = sourceAdapter(newsSource)
-        recyclerView.adapter = adapter
+                    adapter = sourceAdapter(newsSource)
+                    runOnUiThread{
+                        recyclerView.adapter = adapter
+                        recyclerView.layoutManager = LinearLayoutManager(this@sourceActivity)
+                    }
+                }
+
+            }
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+
+
+//        val newsSource: List<sources> = getFakeSources()
+//
+//
+//         Sets scrolling direction to vertical
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//
+//        val adapter: sourceAdapter = sourceAdapter(newsSource)
+
     }
 
-    fun getFakeTweets(): List<sources> {
+    fun getFakeSources(): List<sources> {
         return listOf(
             sources(
                 sourceName = "BBC Global News",
