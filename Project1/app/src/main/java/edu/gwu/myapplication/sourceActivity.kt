@@ -16,7 +16,7 @@ class sourceActivity : AppCompatActivity() {
     private lateinit var adapter: sourceAdapter
     var category_ind = 0
 
-    val categories = arrayOf<String>("general", "entertainment", "general", "health", "science", "sports", "technology")
+    val categories = arrayOf<String>("Business", "Entertainment", "General", "Health", "Science", "Sports", "Technology")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
