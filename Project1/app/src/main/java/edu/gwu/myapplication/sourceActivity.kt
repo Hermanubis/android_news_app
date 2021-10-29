@@ -14,6 +14,7 @@ class sourceActivity : AppCompatActivity() {
     private lateinit var spinner: Spinner
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: sourceAdapter
+    private lateinit var skip: Button
     var category_ind = 0
 
     val categories = arrayOf<String>("Business", "Entertainment", "General", "Health", "Science", "Sports", "Technology")
@@ -23,6 +24,7 @@ class sourceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_sources)
         spinner = findViewById(R.id.spinner)
         //spinner.onItemSelectedListener = this
+        skip = findViewById(R.id.skip)
 
         // Retrieve data from the Intent that launched this screen
         val intent: Intent = getIntent()
@@ -58,6 +60,12 @@ class sourceActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
+        }
+
+        skip.setOnClickListener{
+            val intent: Intent = Intent(this, resultActivity::class.java)
+            intent.putExtra("searchTerm", term)
+            startActivity(intent)
         }
 
 

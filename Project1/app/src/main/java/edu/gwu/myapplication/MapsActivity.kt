@@ -1,6 +1,8 @@
 package edu.gwu.myapplication
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
@@ -66,6 +68,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      * This is where we can add markers or lines, add listeners or move the camera.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+        val preferences: SharedPreferences = getSharedPreferences("android-news", Context.MODE_PRIVATE)
+
         mMap = googleMap
         val newsAPI = getString(R.string.newsAPI)
         val newsManager: newsManager = newsManager()
@@ -95,10 +99,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     listOf()
                 }
 
-
-                if(results != null){
+                if(results == null || results.isEmpty()){
+                    textView.text = "Error: Loaction not found"
+                }
+                else{
                     var articles: List<news> = newsManager.retrieveMapNews(newsAPI, results)
-                    
+
                     adapter = newsAdapter(articles)
                     textView.text = "Results from ${results[0].countryName}"
                     // Move back to the UI Thread now that we have some results to show.
