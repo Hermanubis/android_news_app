@@ -22,24 +22,42 @@ class resultActivity : AppCompatActivity() {
         // Retrieve data from the Intent that launched this screen
         val intent: Intent = getIntent()
         val searchTerm: String = intent.getStringExtra("searchTerm")!!
+        val selectedSource: String = intent.getStringExtra("selectedSource")!!
 
-        if(searchTerm != null) {
-            val title = "Results for ${searchTerm}"
-            setTitle(title)
+        if(!searchTerm.isNullOrEmpty()) {
 
             val newsManager: newsManager = newsManager()
             val newsAPI = getString(R.string.newsAPI)
 
-            doAsync {
+            if(selectedSource == "none") {
+                val title = "Results for ${searchTerm}"
+                setTitle(title)
+                doAsync {
 
-                var articles: List<news> = newsManager.retrieveAllNews(newsAPI, searchTerm)
-                adapter = newsAdapter(articles)
+                    var articles: List<news> = newsManager.retrieveAllNews(newsAPI, searchTerm)
+                    adapter = newsAdapter(articles)
 
-                runOnUiThread {
-                    recyclerView.adapter = adapter
-                    recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+                    runOnUiThread {
+                        recyclerView.adapter = adapter
+                        recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+                    }
+
                 }
+            }
+            else{
+                val title = "Results for ${searchTerm} from ${selectedSource}"
+                setTitle(title)
+                doAsync {
 
+                    var articles: List<news> = newsManager.retrieveNewsFromSource(newsAPI, searchTerm, selectedSource)
+                    adapter = newsAdapter(articles)
+
+                    runOnUiThread {
+                        recyclerView.adapter = adapter
+                        recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+                    }
+
+                }
             }
         }
         else{

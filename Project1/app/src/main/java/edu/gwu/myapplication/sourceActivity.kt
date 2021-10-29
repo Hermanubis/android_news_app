@@ -49,7 +49,7 @@ class sourceActivity : AppCompatActivity() {
                 doAsync {
                     val newsSource: List<sources> = newsManager.retrieveSources(newsAPI, categories[category_ind])
 
-                    adapter = sourceAdapter(newsSource)
+                    adapter = sourceAdapter(newsSource, term)
                     runOnUiThread{
                         recyclerView.adapter = adapter
                         recyclerView.layoutManager = LinearLayoutManager(this@sourceActivity)
@@ -65,6 +65,7 @@ class sourceActivity : AppCompatActivity() {
         skip.setOnClickListener{
             val intent: Intent = Intent(this, resultActivity::class.java)
             intent.putExtra("searchTerm", term)
+            intent.putExtra("selectedSource", "none")
             startActivity(intent)
         }
 
