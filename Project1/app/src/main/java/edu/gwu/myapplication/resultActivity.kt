@@ -2,6 +2,7 @@ package edu.gwu.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -34,29 +35,55 @@ class resultActivity : AppCompatActivity() {
                 setTitle(title)
                 doAsync {
 
-                    var articles: List<news> = newsManager.retrieveAllNews(newsAPI, searchTerm)
-                    adapter = newsAdapter(articles)
-
-                    runOnUiThread {
-                        recyclerView.adapter = adapter
-                        recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+//                    var articles: List<news> = newsManager.retrieveAllNews(newsAPI, searchTerm)
+                    val articles: List<news> = try {
+                        newsManager.retrieveAllNews(newsAPI, searchTerm)
+                    } catch(exception: Exception) {
+//                        Log.e("resultActivity", "Retrieving news failed!", exception)
+                        listOf<news>()
                     }
 
+                    runOnUiThread {
+                        if(articles.isNotEmpty()){
+                            adapter = newsAdapter(articles)
+                            recyclerView.adapter = adapter
+                            recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+                        }
+                        else{
+                            Toast.makeText(
+                                this@resultActivity,
+                                getString(R.string.error_result),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
             }
             else{
-                val title = "Results for ${searchTerm} from ${selectedSource}"
+                val title = "${selectedSource} results for ${searchTerm}"
                 setTitle(title)
                 doAsync {
-
-                    var articles: List<news> = newsManager.retrieveNewsFromSource(newsAPI, searchTerm, selectedSource)
-                    adapter = newsAdapter(articles)
-
-                    runOnUiThread {
-                        recyclerView.adapter = adapter
-                        recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+                    val articles: List<news> = try {
+                        newsManager.retrieveNewsFromSource(newsAPI, searchTerm, selectedSource)
+                    } catch(exception: Exception) {
+//                        Log.e("resultActivity", "Retrieving news failed!", exception)
+                        listOf<news>()
                     }
 
+                    runOnUiThread {
+                        if(articles.isNotEmpty()){
+                            adapter = newsAdapter(articles)
+                            recyclerView.adapter = adapter
+                            recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
+                        }
+                        else{
+                            Toast.makeText(
+                                this@resultActivity,
+                                getString(R.string.error_result),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
             }
         }

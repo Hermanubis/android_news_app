@@ -7,5 +7,6 @@ data class news(
     val source: String,
     val iconurl: String,
     val content: String,
-    val link: String
+    val link: String,
+    val totalResult: Int
 ): Serializable

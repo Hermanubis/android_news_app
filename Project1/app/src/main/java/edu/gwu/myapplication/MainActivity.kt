@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             val intent: Intent = Intent(this, MapsActivity::class.java)
             startActivity(intent)
         }
+
+        viewHeadline.setOnClickListener{
+            val intent: Intent = Intent(this, headlineActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 //    private val textWatcher: TextWatcher = object : TextWatcher {

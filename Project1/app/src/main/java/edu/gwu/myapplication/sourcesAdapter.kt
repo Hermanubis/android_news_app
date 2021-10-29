@@ -34,10 +34,11 @@ class sourceAdapter(val newsSources: List<sources>, val term: String) : Recycler
         val currSource = newsSources[position]
         viewHolder.sourceName.text = currSource.sourceName
         viewHolder.sourceContent.text = currSource.sourceContent
+        val sourceID: String = currSource.sourceID
         viewHolder.cardView.setOnClickListener {
             val intent: Intent = Intent(it.context, resultActivity::class.java)
             intent.putExtra("searchTerm", term)
-            intent.putExtra("selectedSource", currSource.sourceName.toString())
+            intent.putExtra("selectedSource", sourceID)
             it.context.startActivity(intent)
         }
     }

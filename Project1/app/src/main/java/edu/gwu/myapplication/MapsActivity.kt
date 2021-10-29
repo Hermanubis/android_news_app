@@ -91,26 +91,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     geocoder.getFromLocation(coords.latitude, coords.longitude, 10)
                 } catch (exception: Exception) {
                     // Uses the error logger to print the error
-                    Log.e("MapsActivity", "Geocoding failed", exception)
-
-                    // Uses System.out.println to print the error
-                    exception.printStackTrace()
+//                    Log.e("MapsActivity", "Geocoding failed", exception)
+//                    exception.printStackTrace()
 
                     listOf()
                 }
 
-                if(results == null || results.isEmpty()){
+                if(results.isEmpty()){
                     textView.text = "Error: Loaction not found"
+                    Toast.makeText(
+                        this@MapsActivity,
+                        getString(R.string.error_Location),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 else{
-                    var articles: List<news> = newsManager.retrieveMapNews(newsAPI, results)
+                    val articles: List<news> = try {
+                        newsManager.retrieveMapNews(newsAPI, results)
+                    } catch(exception: Exception) {
+//                        Log.e("resultActivity", "Retrieving news failed!", exception)
+                        listOf<news>()
+                    }
 
-                    adapter = newsAdapter(articles)
-                    textView.text = "Results from ${results[0].countryName}"
-                    // Move back to the UI Thread now that we have some results to show.
-                    // The UI can only be updated from the UI Thread.
                     runOnUiThread {
-                        if (results.isNotEmpty()) {
+                        if(articles.isNotEmpty()){
+                            adapter = newsAdapter(articles)
+                            textView.text = "Results from ${results[0].countryName}"
+                            recyclerView.adapter = adapter
                             // Potentially, we could show all results to the user to choose from,
                             // but for our usage it's sufficient enough to just use the first result.
                             // The Geocoder's first result is often the "best" one in terms of its accuracy / confidence.
@@ -118,8 +125,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             val postalAddress: String = firstResult.getAddressLine(0)
                             val adminArea = results[0].adminArea
                             val country = results[0].countryName
-
-                            //Log.d("MapsActivity", "First result: $postalAddress")
 
                             googleMap.addMarker(
                                 MarkerOptions().position(coords).title(adminArea)
@@ -130,18 +135,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
                             cardView.visibility = View.VISIBLE
                             recyclerView.adapter = adapter
-                            recyclerView.layoutManager = LinearLayoutManager(this@MapsActivity)
+                            recyclerView.layoutManager = LinearLayoutManager(this@MapsActivity, LinearLayoutManager.HORIZONTAL, false)
 
                             updateCurrentAddress(firstResult)
-                        } else {
-                            Log.d("MapsActivity", "No results from geocoder!")
-
-                            val toast = Toast.makeText(
+                        }
+                        else{
+                            Toast.makeText(
                                 this@MapsActivity,
-                                getString(R.string.geocoder_no_results),
+                                getString(R.string.error_Location_news),
                                 Toast.LENGTH_LONG
-                            )
-                            toast.show()
+                            ).show()
                         }
                     }
                 }

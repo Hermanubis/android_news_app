@@ -47,8 +47,9 @@ class newsManager {
             for (i in 0 until sources.length()) {
                 val curr: JSONObject = sources.getJSONObject(i)
                 val name = curr.getString("name")
+                val id = curr.getString("id")
                 val description = curr.getString("description")
-                sourceList.add(sources(name, description))
+                sourceList.add(sources(name, id, description))
             }
         }
 
@@ -60,10 +61,6 @@ class newsManager {
 
         // Unlike normal API Keys (like Google Maps and News API) Twitter uses something slightly different,
         // so the "apiKey" here isn't really an API Key - we'll see in Lecture 7.
-
-        if (location[1].countryCode.isNullOrEmpty()) {
-            return emptyList()
-        }
 
         var request: Request =
             Request.Builder()
@@ -78,6 +75,7 @@ class newsManager {
         if (response.isSuccessful && !responseBody.isNullOrBlank()) {
             val json: JSONObject = JSONObject(responseBody)
             val articles: JSONArray = json.getJSONArray("articles")
+            val numArticle: Int = json.getInt("totalResults")
 
             for (i in 0 until articles.length()) {
                 val curr: JSONObject = articles.getJSONObject(i)
@@ -86,7 +84,7 @@ class newsManager {
                 val urlToImage = curr.getString("urlToImage")
                 val content = curr.getString("content")
                 val url = curr.getString("url")
-                newsArticles.add(news(title, source, urlToImage, content, url))
+                newsArticles.add(news(title, source, urlToImage, content, url, numArticle))
             }
         }
 
@@ -112,6 +110,7 @@ class newsManager {
         if (response.isSuccessful && !responseBody.isNullOrBlank()) {
             val json: JSONObject = JSONObject(responseBody)
             val articles: JSONArray = json.getJSONArray("articles")
+            val numArticle: Int = json.getInt("totalResults")
 
             for (i in 0 until articles.length()) {
                 val curr: JSONObject = articles.getJSONObject(i)
@@ -120,7 +119,7 @@ class newsManager {
                 val urlToImage = curr.getString("urlToImage")
                 val content = curr.getString("content")
                 val url = curr.getString("url")
-                newsArticles.add(news(title, source, urlToImage, content, url))
+                newsArticles.add(news(title, source, urlToImage, content, url, numArticle))
             }
         }
 
@@ -146,6 +145,7 @@ class newsManager {
         if (response.isSuccessful && !responseBody.isNullOrBlank()) {
             val json: JSONObject = JSONObject(responseBody)
             val articles: JSONArray = json.getJSONArray("articles")
+            val numArticle: Int = json.getInt("totalResults")
 
             for (i in 0 until articles.length()) {
                 val curr: JSONObject = articles.getJSONObject(i)
@@ -154,7 +154,41 @@ class newsManager {
                 val urlToImage = curr.getString("urlToImage")
                 val content = curr.getString("content")
                 val url = curr.getString("url")
-                newsArticles.add(news(title, source, urlToImage, content, url))
+                newsArticles.add(news(title, source, urlToImage, content, url, numArticle))
+            }
+        }
+
+        return newsArticles
+    }
+
+    fun retrieveTopHeadline(newsAPI: String, category: String, page: String): List<news> {
+        val newsArticles: MutableList<news> = mutableListOf()
+
+        // Unlike normal API Keys (like Google Maps and News API) Twitter uses something slightly different,
+        // so the "apiKey" here isn't really an API Key - we'll see in Lecture 7.
+
+        var request: Request =
+            Request.Builder()
+                .url("https://newsapi.org/v2/top-headlines?category=${category}&page=${page}&apiKey=$newsAPI")
+                .header("Authorization", "$newsAPI")
+                .build()
+
+        val response: Response = okHttpClient.newCall(request).execute()
+        val responseBody: String? = response.body?.string()
+
+        if (response.isSuccessful && !responseBody.isNullOrBlank()) {
+            val json: JSONObject = JSONObject(responseBody)
+            val articles: JSONArray = json.getJSONArray("articles")
+            val numArticle: Int = json.getInt("totalResults")
+
+            for (i in 0 until articles.length()) {
+                val curr: JSONObject = articles.getJSONObject(i)
+                val title = curr.getString("title")
+                val source = curr.getJSONObject("source").getString("name")
+                val urlToImage = curr.getString("urlToImage")
+                val content = curr.getString("content")
+                val url = curr.getString("url")
+                newsArticles.add(news(title, source, urlToImage, content, url, numArticle))
             }
         }
 
