@@ -36,6 +36,8 @@
             android:exported="true"
             android:label="@string/title_activity_maps" />
         <activity android:name=".sourceActivity" />
+        <activity android:name=".resultActivity" />
+        <activity android:name=".headlineActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

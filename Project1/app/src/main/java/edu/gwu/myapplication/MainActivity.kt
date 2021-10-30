@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//        val preferences: SharedPreferences = getSharedPreferences("android-news", Context.MODE_PRIVATE)
+        val preferences: SharedPreferences = getSharedPreferences("android-news", Context.MODE_PRIVATE)
 
         searchbar = findViewById(R.id.searchbar)
         search = findViewById(R.id.search)
@@ -34,10 +34,14 @@ class MainActivity : AppCompatActivity() {
 
         search.isEnabled = false
 
-//        val savedSearch = preferences.getString("SEARCHED-ITEM", "")
-//        search.setText(savedSearch)
+        val savedSearch = preferences.getString("SEARCHTERM", "")
+        val enableButton: Boolean = savedSearch!!.isNotBlank()
+        search.isEnabled = enableButton
+        searchbar.setQuery(savedSearch, false)
 
         searchbar.setOnSearchClickListener{
+            val editor = preferences.edit()
+            editor.putString("SEARCHTERM", searchbar.query.toString()).apply()
             val intent: Intent = Intent(this, sourceActivity::class.java)
             intent.putExtra("TERM", searchbar.query.toString())
             startActivity(intent)
@@ -47,6 +51,8 @@ class MainActivity : AppCompatActivity() {
         searchbar.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(term: String?): Boolean {
+                val editor = preferences.edit()
+                editor.putString("SEARCHTERM", term).apply()
                 val intent: Intent = Intent(applicationContext, sourceActivity::class.java)
                 intent.putExtra("TERM", searchbar.query.toString())
                 startActivity(intent)
@@ -54,6 +60,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(term1: String?): Boolean {
+                val editor = preferences.edit()
+                editor.putString("SEARCHTERM", term1).apply()
                 val enableButton: Boolean = searchbar.query.isNotBlank()
                 search.isEnabled = enableButton
                 return enableButton
@@ -61,13 +69,20 @@ class MainActivity : AppCompatActivity() {
         })
 
         search.setOnClickListener {
+            val editor = preferences.edit()
+            editor.putString("SEARCHTERM", searchbar.query.toString()).apply()
             val intent: Intent = Intent(this, sourceActivity::class.java)
             intent.putExtra("TERM", searchbar.query.toString())
             startActivity(intent)
         }
 
         mapButton.setOnClickListener{
-            val intent: Intent = Intent(applicationContext, MapsActivity::class.java)
+            val intent: Intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }
+
+        viewHeadline.setOnClickListener{
+            val intent: Intent = Intent(this, headlineActivity::class.java)
             startActivity(intent)
         }
     }

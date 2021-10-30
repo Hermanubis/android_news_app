@@ -1,10 +1,13 @@
 package edu.gwu.myapplication
 
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 
@@ -33,12 +36,17 @@ class newsAdapter(val news: List<news>) : RecyclerView.Adapter<newsAdapter.ViewH
         viewHolder.content.text = currNews.content
         viewHolder.source.text = currNews.source
         if (currNews.iconurl.isNotBlank()) {
-            Picasso.get().setIndicatorsEnabled(true)
+            //Picasso.get().setIndicatorsEnabled(true)
 
             Picasso
                 .get()
                 .load(currNews.iconurl)
                 .into(viewHolder.thumbnail)
+        }
+        viewHolder.cardView.setOnClickListener {
+            val intent: Intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse(currNews.link)
+            it.context.startActivity(intent)
         }
     }
 
@@ -47,5 +55,6 @@ class newsAdapter(val news: List<news>) : RecyclerView.Adapter<newsAdapter.ViewH
         val content: TextView = rootLayout.findViewById(R.id.news_content)
         val thumbnail: ImageView = rootLayout.findViewById(R.id.newsIcon)
         val source: TextView = rootLayout.findViewById(R.id.news_source)
+        val cardView: CardView = rootLayout.findViewById(R.id.newsCard)
     }
 }
