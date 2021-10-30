@@ -83,15 +83,6 @@ class sourceActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
-//        val newsSource: List<sources> = getFakeSources()
-//
-//
-//         Sets scrolling direction to vertical
-//        recyclerView.layoutManager = LinearLayoutManager(this)
-//
-//        val adapter: sourceAdapter = sourceAdapter(newsSource)
-
     }
 
 //    fun getFakeSources(): List<sources> {

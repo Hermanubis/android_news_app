@@ -60,8 +60,6 @@ class resultActivity : AppCompatActivity() {
                 }
             }
             else{
-                val title = "${selectedSource} results for ${searchTerm}"
-                setTitle(title)
                 doAsync {
                     val articles: List<news> = try {
                         newsManager.retrieveNewsFromSource(newsAPI, searchTerm, selectedSource)
@@ -73,6 +71,9 @@ class resultActivity : AppCompatActivity() {
                     runOnUiThread {
                         if(articles.isNotEmpty()){
                             adapter = newsAdapter(articles)
+                            val source_Name: String = articles[0].source
+                            val title = "${source_Name} results for ${searchTerm}"
+                            setTitle(title)
                             recyclerView.adapter = adapter
                             recyclerView.layoutManager = LinearLayoutManager(this@resultActivity)
                         }

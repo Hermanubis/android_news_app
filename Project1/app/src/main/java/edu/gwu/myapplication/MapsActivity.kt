@@ -100,11 +100,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             else{
                 val editor = preferences.edit()
-                editor.putString("lat", sharedCoord.latitude.toString())
+                editor.putString("prevLat", sharedCoord.latitude.toString())
+                editor.putString("prevLon", sharedCoord.longitude.toString())
                 editor.apply()
-                val editor1 = preferences.edit()
-                editor1.putString("lon", sharedCoord.longitude.toString())
-                editor1.apply()
                 val articles: List<news> = try {
                     newsManager.retrieveMapNews(newsAPI, results)
                 } catch(exception: Exception) {
@@ -181,11 +179,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 else{
                     val editor = preferences.edit()
-                    editor.putString("lat", coords.latitude.toString())
+                    editor.putString("prevLat", coords.latitude.toString())
+                    editor.putString("prevLon", coords.longitude.toString())
                     editor.apply()
-                    val editor1 = preferences.edit()
-                    editor1.putString("lon", coords.longitude.toString())
-                    editor1.apply()
                     val articles: List<news> = try {
                         newsManager.retrieveMapNews(newsAPI, results)
                     } catch(exception: Exception) {

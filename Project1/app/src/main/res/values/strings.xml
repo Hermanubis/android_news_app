@@ -14,6 +14,7 @@
     <string name="title_activity_maps">MapsActivity</string>
     <string name="geocoder_no_results">No news results for location!</string>
     <string name="error_result">Failed to retrieve news!</string>
+    <string name="error_headline">Failed to retrieve headline!</string>
     <string name="error_Location">Location not found!</string>
     <string name="error_prevLocation">No previously stored location loaded</string>
     <string name="error_Location_news">Failed to retrieve local news!</string>

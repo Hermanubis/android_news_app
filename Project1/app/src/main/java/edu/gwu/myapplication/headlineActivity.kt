@@ -99,7 +99,7 @@ class headlineActivity : AppCompatActivity(){
                         } else {
                             Toast.makeText(
                                 this@headlineActivity,
-                                getString(R.string.error_result),
+                                getString(R.string.error_headline),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -143,7 +143,7 @@ class headlineActivity : AppCompatActivity(){
                         } else {
                             Toast.makeText(
                                 this@headlineActivity,
-                                getString(R.string.error_result),
+                                getString(R.string.error_headline),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
@@ -183,7 +183,7 @@ class headlineActivity : AppCompatActivity(){
                         } else {
                             Toast.makeText(
                                 this@headlineActivity,
-                                getString(R.string.error_result),
+                                getString(R.string.error_headline),
                                 Toast.LENGTH_LONG
                             ).show()
                         }
