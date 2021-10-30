@@ -15,8 +15,9 @@
     <string name="geocoder_no_results">No news results for location!</string>
     <string name="error_result">Failed to retrieve news!</string>
     <string name="error_Location">Location not found!</string>
+    <string name="error_prevLocation">No previously stored location loaded</string>
     <string name="error_Location_news">Failed to retrieve local news!</string>
     <string name="error_source">Failed to retrieve source!</string>
-    <string name="newsAPI">1001e1d309494d3a9dd1b713020730dd</string>
+    <string name="newsAPI">fc8aaa3dc36042ff826f2cdcadd1fa44</string>
     <string name="mapAPI">AIzaSyA-arwwlXythL8E4n9wF4Iu6qHDKimzzDo</string>
 </resources>

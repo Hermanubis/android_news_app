@@ -1,6 +1,8 @@
 package edu.gwu.myapplication
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -26,12 +28,22 @@ class headlineActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_headline)
+
+        val preferences: SharedPreferences = getSharedPreferences("android-news", Context.MODE_PRIVATE)
+
         spinner = findViewById(R.id.headline_spinner)
         prevButton = findViewById(R.id.prev_page)
         nextButton = findViewById(R.id.next_page)
         textView = findViewById(R.id.pageNum)
 
+        prevButton.isEnabled = false
+        prevButton.setTextColor(getColor(R.color.myGrey))
         // Retrieve data from the Intent that launched this screen
+
+        val savedCategory = preferences.getInt("INDEX", -1)
+        if(savedCategory >= 0){
+            category_ind = savedCategory
+        }
 
         val title = "Top Headlines"
         setTitle(title)
@@ -55,6 +67,9 @@ class headlineActivity : AppCompatActivity(){
                 id: Long
             ) {
                 category_ind = position
+                val editor = preferences.edit()
+                editor.putInt("INDEX", category_ind)
+                editor.apply()
                 doAsync {
                     val articles: List<news> = try {
                         newsManager.retrieveTopHeadline(newsAPI, categories[category_ind], "1")
@@ -68,11 +83,18 @@ class headlineActivity : AppCompatActivity(){
                             page = 1
                             totalpage = ceil(articles[0].totalResult.toDouble()/20.0).toInt()
                             prevButton.isEnabled = false
-                            nextButton.isEnabled = totalpage > 1
+                            prevButton.setTextColor(getColor(R.color.myGrey))
+                            if(totalpage > 1){
+                                nextButton.isEnabled = true
+                                nextButton.setTextColor(getColor(R.color.white))
+                            }
+                            else{
+                                nextButton.isEnabled = false
+                                nextButton.setTextColor(getColor(R.color.myGrey))
+                            }
                             textView.text = "${page} / ${totalpage}"
                             adapter = newsAdapter(articles)
                             recyclerView.adapter = adapter
-                            page++
                             recyclerView.layoutManager = LinearLayoutManager(this@headlineActivity)
                         } else {
                             Toast.makeText(
@@ -91,8 +113,10 @@ class headlineActivity : AppCompatActivity(){
             }
         }
         nextButton.setOnClickListener{
-            if(page <= totalpage) {
+            page += 1
+            if(page < totalpage) {
                 nextButton.isEnabled = true
+                nextButton.setTextColor(getColor(R.color.white))
                 doAsync {
                     val articles: List<news> = try {
                         newsManager.retrieveTopHeadline(
@@ -107,13 +131,14 @@ class headlineActivity : AppCompatActivity(){
                     runOnUiThread {
                         if (articles.isNotEmpty()) {
                             prevButton.isEnabled = true
+                            prevButton.setTextColor(getColor(R.color.white))
                             textView.text = "${page} / ${totalpage}"
                             if(page == totalpage){
                                 nextButton.isEnabled = false
+                                nextButton.setTextColor(getColor(R.color.myGrey))
                             }
                             adapter = newsAdapter(articles)
                             recyclerView.adapter = adapter
-                            page++
                             recyclerView.layoutManager = LinearLayoutManager(this@headlineActivity)
                         } else {
                             Toast.makeText(
@@ -128,8 +153,10 @@ class headlineActivity : AppCompatActivity(){
         }
 
         prevButton.setOnClickListener{
-            if(page > 1) {
+            page -= 1
+            if(page >= 1) {
                 prevButton.isEnabled = true
+                prevButton.setTextColor(getColor(R.color.white))
                 doAsync {
                     val articles: List<news> = try {
                         newsManager.retrieveTopHeadline(
@@ -144,13 +171,14 @@ class headlineActivity : AppCompatActivity(){
                     runOnUiThread {
                         if (articles.isNotEmpty()) {
                             nextButton.isEnabled = true
+                            nextButton.setTextColor(getColor(R.color.white))
                             textView.text = "${page} / ${totalpage}"
                             if(page == 1){
                                 prevButton.isEnabled = false
+                                prevButton.setTextColor(getColor(R.color.myGrey))
                             }
                             adapter = newsAdapter(articles)
                             recyclerView.adapter = adapter
-                            page--
                             recyclerView.layoutManager = LinearLayoutManager(this@headlineActivity)
                         } else {
                             Toast.makeText(

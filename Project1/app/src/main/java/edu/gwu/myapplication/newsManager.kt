@@ -64,7 +64,7 @@ class newsManager {
 
         var request: Request =
             Request.Builder()
-                .url("https://newsapi.org/v2/everything?qInTitle=${location[0].countryName}&sortBy=relevancy&apiKey=$newsAPI")
+                .url("https://newsapi.org/v2/everything?qInTitle=${location[0].countryName}&language=en&sortBy=relevancy&apiKey=$newsAPI")
                 .header("Authorization", "$newsAPI")
                 .build()
 
@@ -99,7 +99,7 @@ class newsManager {
 
         var request: Request =
             Request.Builder()
-                .url("https://newsapi.org/v2/everything?qInTitle=${term}&sortBy=relevancy&apiKey=$newsAPI")
+                .url("https://newsapi.org/v2/everything?qInTitle=${term}&language=en&sortBy=relevancy&apiKey=$newsAPI")
                 .header("Authorization", "$newsAPI")
                 .build()
 
@@ -134,7 +134,7 @@ class newsManager {
 
         var request: Request =
             Request.Builder()
-                .url("https://newsapi.org/v2/everything?qInTitle=${term}&sources=${selectedSource}&sortBy=relevancy&apiKey=$newsAPI")
+                .url("https://newsapi.org/v2/everything?qInTitle=${term}&sources=${selectedSource}&language=en&sortBy=relevancy&apiKey=$newsAPI")
                 .header("Authorization", "$newsAPI")
                 .build()
 
@@ -169,7 +169,7 @@ class newsManager {
 
         var request: Request =
             Request.Builder()
-                .url("https://newsapi.org/v2/top-headlines?category=${category}&page=${page}&apiKey=$newsAPI")
+                .url("https://newsapi.org/v2/top-headlines?category=${category}&page=${page}&language=en&apiKey=$newsAPI")
                 .header("Authorization", "$newsAPI")
                 .build()
 
